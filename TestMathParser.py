@@ -1,7 +1,17 @@
 import re
 ops=["^","*","/","-","+"]
 spec=["(",")"]
+def simplify(s):
+    s = re.sub("\\s+","",s)
+    s = re.sub("(-\\+|\\+-)+", "-",s)
+    s = re.sub("(-{2})+|\\++", "",s)
+    s = re.sub("(-\\s*\\+|\\+\\s*-|-)+", "-",s)
+    s = re.sub("\\*(\\s*|\\++)", "*",s)
+    s = re.sub("/(\\s*|\\++)", "/",s)
+    s = re.sub("\\s*\\^\\s*", "^",s)
+    return s
 def calc(p):
+    p=simplify(p)
     p=re.sub("(?<=[\(\b ])\-","0-",p)
     s=p
     shell=peel(p)
@@ -59,7 +69,7 @@ def evaluate(s):
     v=s[1:len(s)-1]
     return v
 def f():
-    s=input()
+    s=input(">")
     l_input=list(set(re.findall("([a-z])",s)))
     if len(l_input)!=0:
         x={}
@@ -71,6 +81,7 @@ def f():
     else:
         return calc(s)
 if __name__ == "__main__":
-    print(f())
+    while True:
+        print(f())
 
 
